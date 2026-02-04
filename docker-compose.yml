@@ -1,0 +1,21 @@
+services:
+  streamtv:
+    build: .
+    container_name: streamtv
+    ports:
+      - "8000:8000"
+      - "6881-6891:6881-6891"
+      - "6881-6891:6881-6891/udp"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY:-}
+    volumes:
+      - streamtv_cache:/tmp/streamtv_torrents
+    restart: unless-stopped
+    # DNS externes pour contourner le blocage FAI
+    dns:
+      - 1.1.1.1        # Cloudflare
+      - 8.8.8.8        # Google
+      - 9.9.9.9        # Quad9
+
+volumes:
+  streamtv_cache:
